@@ -24,9 +24,10 @@ public class NIOServer {
             try {
                 // 对应IO编程中服务端启动
                 ServerSocketChannel listenerChannel = ServerSocketChannel.open();
+                System.out.println("open():" + listenerChannel);
                 listenerChannel.socket().bind(new InetSocketAddress(8000));
                 listenerChannel.configureBlocking(false);
-                listenerChannel.register(serverSelector, SelectionKey.OP_ACCEPT);
+                SelectionKey register = listenerChannel.register(serverSelector, SelectionKey.OP_ACCEPT);
 
                 while (true) {
                     // 监测是否有新的连接，这里的1指的是阻塞的时间为 1ms
@@ -40,7 +41,11 @@ public class NIOServer {
                             if (key.isAcceptable()) {
                                 try {
                                     // (1) 每来一个新连接，不需要创建一个线程，而是直接注册到clientSelector
-                                    SocketChannel clientChannel = ((ServerSocketChannel) key.channel()).accept();
+                                    ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();//每次新连接进来，serverSocketChannel一样的吗？
+                                    System.out.println("key.channel():" + serverSocketChannel);
+                                    System.out.println(serverSocketChannel == listenerChannel);
+                                    SocketChannel clientChannel = serverSocketChannel.accept();
+                                    //SocketChannel clientChannel = ((ServerSocketChannel) key.channel()).accept();
                                     clientChannel.configureBlocking(false);
                                     clientChannel.register(clientSelector, SelectionKey.OP_READ);
                                 } finally {
@@ -60,7 +65,6 @@ public class NIOServer {
 
         new Thread(() -> {
             try {
-                int i = 0;
                 while (true) {
                     // (2) 批量轮询是否有哪些连接有数据可读，这里的1指的是阻塞的时间为 1ms
                     if (clientSelector.select(1) > 0) {
@@ -73,12 +77,6 @@ public class NIOServer {
                             if (key.isReadable()) {
                                 try {
                                     SocketChannel clientChannel = (SocketChannel) key.channel();
-                                    System.out.println(clientChannel.socket().getKeepAlive());
-                                    if (i++ == 5) {
-                                        clientChannel.socket().close();
-
-                                        System.out.println("Channel close!");
-                                    }
                                     ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
                                     // (3) 面向 Buffer
                                     clientChannel.read(byteBuffer);

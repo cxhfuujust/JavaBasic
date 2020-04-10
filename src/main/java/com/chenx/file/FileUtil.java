@@ -7,6 +7,7 @@ import java.util.*;
  * https://www.cnblogs.com/chenhuan001/p/6575053.html
  */
 public class FileUtil {
+
     public static void main(String[] args) throws Exception {
         File file = new File("D:\\极客时间\\01-专栏课");
         deleteDir1(file);
@@ -19,13 +20,15 @@ public class FileUtil {
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
-                if (file.isFile()) {
-                    if (getFileExt1(file.getName()).equals("mp3")) {
+                System.out.println(file.getName());
+                /*if (file.isFile()) {
+                    if (getFileExt1(file.getName()).equals("txt") ||getFileExt1(file.getName()).equals("jpg")) {
+                        System.out.println(file.getName());
                         file.delete();
                     }
                 } else {
-                    deleteDir(file);
-                }
+                    deleteDir1(file);
+                }*/
             }
         }
     }

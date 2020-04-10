@@ -23,7 +23,6 @@ public class IOClient {
                     }
                 }
                 System.out.println("Channel close!");
-                //socket.close();
 
             } catch (IOException e) {
             }
