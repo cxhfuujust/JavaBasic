@@ -56,14 +56,17 @@ public class NioServer {
     private void handleKey(SelectionKey key) throws IOException {
         // 接受连接就绪
         if (key.isAcceptable()) {
+            System.out.println("isAcceptable");
             handleAcceptableKey(key);
         }
         // 读就绪
         if (key.isReadable()) {
+            System.out.println("isReadable");
             handleReadableKey(key);
         }
         // 写就绪
         if (key.isWritable()) {
+            System.out.println("isWritable");
             handleWritableKey(key);
         }
     }

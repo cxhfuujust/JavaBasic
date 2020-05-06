@@ -12,7 +12,7 @@ public class IOClient {
     public static void main(String[] args) {
         new Thread(() -> {
             try {
-                Socket socket = new Socket("127.0.0.1", 8000);
+                Socket socket = new Socket("127.0.0.1", 8080);
                 socket.setKeepAlive(true);
                 System.out.println(socket.getKeepAlive());
                 while (!socket.isClosed()) {

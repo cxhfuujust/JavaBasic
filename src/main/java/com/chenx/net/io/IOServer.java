@@ -13,7 +13,7 @@ public class IOServer {
 
     public static void main(String[] args) throws Exception {
 
-        ServerSocket serverSocket = new ServerSocket(8000);
+        ServerSocket serverSocket = new ServerSocket(8080);
         AtomicInteger connectCount = new AtomicInteger();
         // (1) 接收新连接线程
         new Thread(() -> {
